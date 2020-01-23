@@ -20,10 +20,10 @@ namespace TinyClothesMVC
             Configuration = configuration;
         }
 
-        private void ConfigDbContext(DbContextOptionsBuilder options) 
-        {
-            options.UseSqlServer("con goes here");
-        }
+        //private void ConfigDbContext(DbContextOptionsBuilder options) 
+        //{
+        //    options.UseSqlServer();
+        //}
 
         public IConfiguration Configuration { get; }
 
@@ -34,7 +34,7 @@ namespace TinyClothesMVC
 
             //services.AddDbContext<StoreContext>(ConfigDbContext);
 
-            string connection = Configuration.GetConnectionString("ClothedDB");
+            string connection = Configuration.GetConnectionString("ClothesDB");
 
             //Same as above using Lambda notation
             services.AddDbContext<StoreContext>
