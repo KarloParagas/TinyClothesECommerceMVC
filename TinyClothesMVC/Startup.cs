@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TinyClothesMVC.Data;
 
 namespace TinyClothesMVC
 {
@@ -18,12 +20,27 @@ namespace TinyClothesMVC
             Configuration = configuration;
         }
 
+        //private void ConfigDbContext(DbContextOptionsBuilder options) 
+        //{
+        //    options.UseSqlServer();
+        //}
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            IMvcBuilder builder = services.AddControllersWithViews();
+
+            //services.AddDbContext<StoreContext>(ConfigDbContext);
+
+            string connection = Configuration.GetConnectionString("ClothesDB");
+
+            //Same as above using Lambda notation
+            services.AddDbContext<StoreContext>
+            (
+                options => options.UseSqlServer(connection)
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
