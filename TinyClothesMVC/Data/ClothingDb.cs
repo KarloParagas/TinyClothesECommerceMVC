@@ -12,6 +12,19 @@ namespace TinyClothesMVC.Data
     /// </summary>
     public static class ClothingDb
     {
+        /// <summary>
+        /// Returns the total number of Clothing items
+        /// </summary>
+        /// <returns></returns>
+        public async static Task<int> GetNumClothing(StoreContext context) 
+        {
+            return await context.Clothing.CountAsync();
+
+            //Alternate with query syntax
+            //return await (from c in context.Clothing
+            //              select c).CountAsync();
+        }
+
         //If you wanted page 1, we woouldn't skip ay rows, so we must offset by 1
         const int PAGE_OFFSET = 1;
 
