@@ -44,3 +44,17 @@
     </form>
 </div>
 
+@section Scripts
+{
+    @* This prevents the page from refreshing whenever it needs to show a validation error message. *@
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    @*
+                    These scripts are included in the partial view above
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    *@
+}
+
