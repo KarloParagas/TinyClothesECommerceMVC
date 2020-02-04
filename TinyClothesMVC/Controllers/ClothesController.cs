@@ -22,16 +22,13 @@ namespace TinyClothesMVC.Controllers
         {
             const int PAGE_SIZE = 2;
 
-            //Null-Coalescing operator https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator
+            // Null-coalescing operator: ??
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-coalescing-operator
             int pageNumber = page ?? 1;
+            ViewData["CurrentPage"] = pageNumber;
 
             int maxPage = await GetMaxPage(PAGE_SIZE);
-
-            ViewData["MaxPage"] = maxPage; //This makes maxPage accessible to the ShowAll.cshtml
-
-            ////Just a placeholder s0 when clicking the Inventory like doesn't crash
-            ////It's so the value isnt null
-            //List<Clothing> clothes = new List<Clothing>();
+            ViewData["MaxPage"] = maxPage;
 
             List<Clothing> clothes = await ClothingDb.GetClothingByPage(_context, pageNum: pageNumber, pageSize: PAGE_SIZE);
             return View(clothes);
