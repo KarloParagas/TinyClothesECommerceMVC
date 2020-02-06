@@ -64,5 +64,12 @@ namespace TinyClothesMVC.Controllers
             //Return same view with validation messages
             return View();
         }
+
+        public async Task<IActionResult> Edit(int id) 
+        {
+            Clothing c = await ClothingDb.GetClothingById(id, _context);
+
+            return View(c);
+        }
     }
 }
