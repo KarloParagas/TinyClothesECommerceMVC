@@ -65,10 +65,29 @@ namespace TinyClothesMVC.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int id) 
         {
             Clothing c = await ClothingDb.GetClothingById(id, _context);
 
+            if (c == null) //Clothing not in DB 
+            {
+                //Returns an HTTP 404 - Not Found Error
+                return NotFound();
+            }
+
+            return View(c);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Clothing c) 
+        {
+            if (ModelState.IsValid) 
+            {
+                await ClothingDb.Edit(c, _context);
+                ViewData["Message"] = c.Title + "Updated successfully";
+                return View(c);
+            }
             return View(c);
         }
     }
