@@ -77,6 +77,25 @@ namespace TinyClothesMVC.Data
             return c;
         }
 
+        public static async Task Delete(int id, StoreContext context)
+        {
+            //Clothing c = new Clothing()
+            //{
+            //    ItemId = id
+            //};
+
+            //context.Entry(c).State = EntityState.Deleted; //This tells the Entity Framework that we have the clothing object, but we are removing it from the database
+            //await context.SaveChangesAsync();
+            Clothing c = await GetClothingById(id, context);
+
+            if (c != null) 
+            {
+                await context.AddAsync(c);
+                context.Entry(c).State = EntityState.Deleted;
+                await context.SaveChangesAsync();
+            }
+        }
+
         /// <summary>
         /// Adds a clothing object to the database. Returns the object with the Id populated.
         /// </summary>
