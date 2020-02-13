@@ -47,6 +47,7 @@ namespace TinyClothesMVC.Models
     {
         [Required]
         [StringLength(60)]
+        [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
         [Required]
@@ -61,6 +62,7 @@ namespace TinyClothesMVC.Models
         [Required]
         [Compare(nameof(Password))] //This compares the input from Confirm Password with Password above
         [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         [Required]
