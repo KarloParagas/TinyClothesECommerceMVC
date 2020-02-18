@@ -69,17 +69,4 @@ namespace TinyClothesMVC.Models
         [EmailAddress]
         public string Email { get; set; }
     }
-
-    /// <summary>
-    /// ViewModel for the login page
-    /// </summary>
-    public class LoginViewModel
-    {
-        [Required]
-        public string UsernameOrEmail { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-    }
 }
