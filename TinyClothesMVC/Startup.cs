@@ -36,6 +36,18 @@ namespace TinyClothesMVC
             (
                 options => options.UseSqlServer(connection)
             );
+
+            //Add and Configure session
+            services.AddDistributedMemoryCache(); //Stores session in-memory
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".TinyClothes.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+
+                //Session cookie always gets created even if user does not accept cookie policy
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +69,9 @@ namespace TinyClothesMVC
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //Allows session data to be accessed
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
