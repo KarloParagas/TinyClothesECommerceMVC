@@ -33,7 +33,7 @@ namespace TinyClothesMVC.Controllers
             if (ModelState.IsValid) 
             {
                 //Check if username is not taken
-                if (await AccountDb.IsUsernameTaken(reg.Username, _context))
+                if (!await AccountDb.IsUsernameTaken(reg.Username, _context))
                 {
                     Account acc = new Account()
                     {
@@ -54,7 +54,6 @@ namespace TinyClothesMVC.Controllers
                 else //If username is taken, add error
                 {
                     //Display error with other username error messages
-                    //ModelState.AddModelError(string.Empty, "Username is taken");
                     ModelState.AddModelError(nameof(Account.Username), "Username is taken");
                 }
             }
