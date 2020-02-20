@@ -13,10 +13,12 @@ namespace TinyClothesMVC.Controllers
     public class AccountController : Controller
     {
         private readonly StoreContext _context;
+        private readonly IHttpContextAccessor _http;
 
-        public AccountController(StoreContext context) 
+        public AccountController(StoreContext context, IHttpContextAccessor http) 
         {
             _context = context;
+            _http = http;
         }
 
         [HttpGet]
@@ -45,11 +47,7 @@ namespace TinyClothesMVC.Controllers
                     await AccountDb.Register(_context, acc);
 
                     //Create user session
-                    HttpContext.Session.SetInt32("Id", acc.AccountId);
-                    Console.WriteLine(HttpContext.Session.GetInt32("Id"));
-
-                    HttpContext.Session.SetString("Username", acc.Username);
-                    Console.WriteLine(HttpContext.Session.GetString("Username"));
+                    SessionHelper.CreateUserSession(acc.AccountId, acc.Username, _http);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -59,8 +57,6 @@ namespace TinyClothesMVC.Controllers
                     //ModelState.AddModelError(string.Empty, "Username is taken");
                     ModelState.AddModelError(nameof(Account.Username), "Username is taken");
                 }
-
-                //Add account to DB
             }
             return View(reg);
         }
@@ -76,9 +72,10 @@ namespace TinyClothesMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool isMatch = await AccountDb.DoesUserMatch(login, _context);
-
-                //TODO: Create session       
+                Account acc = await AccountDb.DoesUserMatch(login, _context);
+ 
+                //Create user session
+                SessionHelper.CreateUserSession(acc.AccountId, acc.Username, _http);
 
                 return RedirectToAction("Index", "Home");
             }
