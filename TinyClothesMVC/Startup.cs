@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,10 @@ namespace TinyClothesMVC
             //services.AddDbContext<StoreContext>(ConfigDbContext);
 
             string connection = Configuration.GetConnectionString("ClothesDB");
+
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //Same as ^
+            services.AddHttpContextAccessor();
 
             //Same as above using Lambda notation
             services.AddDbContext<StoreContext>
