@@ -11,6 +11,7 @@
     <title>@ViewData["Title"] - TinyClothesMVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-darkly.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
 </head>
 <body>
     <header>
@@ -53,6 +54,9 @@
         </nav>
     </header>
     <div class="container">
+        <span class="fas fa-shopping-cart fa-2x" style="margin-left: 94%;">
+            @CartHelper.GetCount(sessionInfo)
+        </span>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
