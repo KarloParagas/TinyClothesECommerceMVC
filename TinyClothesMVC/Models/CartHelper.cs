@@ -12,6 +12,8 @@ namespace TinyClothesMVC.Models
     /// </summary>
     public static class CartHelper
     {
+        private const string CartCookie = "CartCookie";
+
         public static void Add(Clothing c, IHttpContextAccessor http) 
         {
             string data = JsonConvert.SerializeObject(c);
@@ -22,12 +24,20 @@ namespace TinyClothesMVC.Models
                 IsEssential = true,
                 Secure = true
             };  
-            http.HttpContext.Response.Cookies.Append("CartCookie", data);
+            http.HttpContext.Response.Cookies.Append(CartCookie, data);
         }
 
         public static int GetCount(IHttpContextAccessor http) 
         {
-            throw new NotImplementedException();
+            string data = http.HttpContext.Request.Cookies[CartCookie];
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                return 0;
+            }
+            else 
+            {
+                return 1;
+            }
         }
 
         public static List<Clothing> GetAllClothes(IHttpContextAccessor http) 
