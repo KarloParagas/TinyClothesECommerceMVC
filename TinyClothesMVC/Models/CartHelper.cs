@@ -2,8 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TinyClothesMVC.Models
 {
@@ -14,35 +12,42 @@ namespace TinyClothesMVC.Models
     {
         private const string CartCookie = "CartCookie";
 
-        public static void Add(Clothing c, IHttpContextAccessor http) 
+        public static void Add(Clothing c, IHttpContextAccessor http)
         {
-            string data = JsonConvert.SerializeObject(c);
+            List<Clothing> clothes = GetAllClothes(http);
+            clothes.Add(c);
+
+            string data = JsonConvert.SerializeObject(clothes);
 
             CookieOptions options = new CookieOptions()
             {
                 Expires = DateTime.Now.AddDays(14),
                 IsEssential = true,
                 Secure = true
-            };  
+            };
             http.HttpContext.Response.Cookies.Append(CartCookie, data);
         }
 
-        public static int GetCount(IHttpContextAccessor http) 
+        public static int GetCount(IHttpContextAccessor http)
+        {
+            List<Clothing> allClothes = GetAllClothes(http);
+            return allClothes.Count;
+        }
+
+        /// <summary>
+        /// Returns all clothing currently storedc in the user's cookie. 
+        /// If no items are present, an empty list is returned.
+        /// </summary>
+        /// <param name="http"></param>
+        /// <returns></returns>
+        public static List<Clothing> GetAllClothes(IHttpContextAccessor http)
         {
             string data = http.HttpContext.Request.Cookies[CartCookie];
             if (string.IsNullOrWhiteSpace(data))
             {
-                return 0;
+                return new List<Clothing>();
             }
-            else 
-            {
-                return 1;
-            }
-        }
-
-        public static List<Clothing> GetAllClothes(IHttpContextAccessor http) 
-        {
-            throw new NotImplementedException();
+            return JsonConvert.DeserializeObject<List<Clothing>>(data);
         }
     }
 }
