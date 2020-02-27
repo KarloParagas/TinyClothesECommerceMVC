@@ -69,11 +69,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
+            @{
+                //Get curr url path "/Clothes/Showall"
+                string previousUrl = http.HttpContext.Request.Path;
+
+                //Add query string "?page=2"
+                previousUrl += http.HttpContext.Request.QueryString.Value;
+             }
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-primary">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a> |
                 <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.ItemId" 
-                   asp-route-prevUrl="@http.HttpContext.Request.Path" class="btn btn-primary">Add to cart</a>
+                   asp-route-prevUrl="@previousUrl" class="btn btn-primary">Add to cart</a>
             </td> @*TODO: Keep page number in prevUrl *@
         </tr>
 }
