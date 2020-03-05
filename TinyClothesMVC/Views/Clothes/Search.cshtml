@@ -9,7 +9,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="get" asp-action="Search"> @* method="get" takes you back to the same page, calls the get method of Search() again *@
+        <form method="get" asp-action="Search">
+            @* method="get" takes you back to the same page, calls the get method of Search() again *@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Size" class="control-label"></label>
@@ -43,14 +44,21 @@
     </div>
 </div>
 
-<div>
-    <ul>
-        @foreach (Clothing c in Model.Results) 
-        {
-            <li>@c.Title : @c.Price</li>
-        }
-    </ul>
-</div>
+@if (Model.Results.Count > 0)
+{
+    <div>
+        <ul>
+            @foreach (Clothing c in Model.Results)
+            {
+                <li>@c.Title : @c.Price</li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <p>No results to display</p>
+}
 
 <div>
     <a asp-action="ShowAll">Back to List</a>
