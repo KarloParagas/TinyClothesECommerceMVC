@@ -116,53 +116,11 @@ namespace TinyClothesMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search(SearchCritetia search) 
+        public async Task<IActionResult> Search(SearchCriteria search) 
         {
-            if (ModelState.IsValid) 
-            {          
-                //Prepare query - SELECT * FROM Clothes
-                //Does NOT get sent to DB
-                IQueryable<Clothing> allClothes = from c in _context.Clothing
-                                  select c;
-
-                if (search.MinPrice.HasValue) 
-                {
-                    //WHERE MinPrice >= ?
-                    allClothes = from c in allClothes
-                                 where c.Price >= search.MinPrice
-                                 select c;           
-                }
-
-                if (search.MaxPrice.HasValue)
-                {
-                    //WHERE Price <= MaxPrice
-                    allClothes = from c in allClothes
-                                 where c.Price <= search.MaxPrice
-                                 select c;
-                }
-
-                if (!string.IsNullOrWhiteSpace(search.Size)) 
-                {
-                    allClothes = from c in allClothes
-                                 where c.Size == search.Size
-                                 select c;
-                }
-
-                if (!string.IsNullOrWhiteSpace(search.Type)) 
-                {
-                    allClothes = from c in allClothes
-                                 where c.Type == search.Type
-                                 select c;
-                }
-
-                if (!string.IsNullOrWhiteSpace(search.Title)) 
-                {
-                    allClothes = from c in allClothes
-                                 where c.Title.Contains(search.Title)
-                                 select c;
-                }
-
-                search.Results = allClothes.ToList();
+            if (ModelState.IsValid)
+            {
+                await ClothingDb.BuildSearchQuery(_context, search);
                 return View(search);
             }
             return View();
