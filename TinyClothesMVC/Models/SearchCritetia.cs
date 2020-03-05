@@ -21,6 +21,7 @@ namespace TinyClothesMVC.Models
         /// </summary>
         public string Type { get; set; }
 
+        [StringLength(150)]
         public string Title { get; set; }
 
         [Display(Name = "Minimum Price")]
@@ -28,7 +29,7 @@ namespace TinyClothesMVC.Models
         public double? MinPrice { get; set; }
 
         [Display(Name = "Maximum Price")]
-        [Range(0, double.MaxValue, ErrorMessage = "The minimum price must be a positive number")]
+        [Range(0, double.MaxValue, ErrorMessage = "The maximum price must be a positive number")]
         public double? MaxPrice { get; set; }
 
         /// <summary>
