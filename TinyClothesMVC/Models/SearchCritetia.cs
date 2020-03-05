@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TinyClothesMVC.Models
 {
-    public class SearchCritetia
+    public class SearchCriteria
     {
         //This constructor makes sure it's always initialized
-        public SearchCritetia()
+        public SearchCriteria()
         {
             Results = new List<Clothing>();
         }
