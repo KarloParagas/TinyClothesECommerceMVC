@@ -36,5 +36,13 @@ namespace TinyClothesMVC.Models
         /// All Clothing items found using the search criteria
         /// </summary>
         public List<Clothing> Results { get; set; }
+
+        /// <summary>
+        /// Returns true if at least one criteria is provided
+        /// </summary>
+        public bool IsBeingSearched() 
+        {
+            return MaxPrice.HasValue || MinPrice.HasValue || Title != null || Type != null || Size != null;
+        }
     }
 }

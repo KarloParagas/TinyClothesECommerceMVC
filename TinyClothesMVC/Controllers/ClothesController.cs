@@ -120,8 +120,16 @@ namespace TinyClothesMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                await ClothingDb.BuildSearchQuery(_context, search);
-                return View(search);
+                if (search.IsBeingSearched())
+                {
+                    await ClothingDb.BuildSearchQuery(_context, search);
+                    return View(search);
+                }
+                else 
+                {
+                    ModelState.AddModelError(string.Empty, "you must search by at least one criteria");
+                    return View(search);
+                }
             }
             return View();
         }
