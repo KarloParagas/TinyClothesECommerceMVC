@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TinyClothesMVC.Data;
 using TinyClothesMVC.Models;
 
@@ -112,6 +113,25 @@ namespace TinyClothesMVC.Controllers
             await ClothingDb.Delete(c, _context);
             TempData["Message"] = $"{c.Title} deleted successfully";
             return RedirectToAction(nameof(ShowAll));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(SearchCriteria search) 
+        {
+            if (ModelState.IsValid)
+            {
+                if (search.IsBeingSearched())
+                {
+                    await ClothingDb.BuildSearchQuery(_context, search);
+                    return View(search);
+                }
+                else 
+                {
+                    ModelState.AddModelError(string.Empty, "you must search by at least one criteria");
+                    return View(search);
+                }
+            }
+            return View();
         }
     }
 }

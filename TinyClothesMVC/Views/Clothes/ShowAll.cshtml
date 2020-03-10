@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<Clothing>
-@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor http
 
 @{
@@ -16,8 +15,13 @@
 }
 
 <p>
+    <a asp-action="Search" asp-controller="Clothes">Search</a>
+</p>
+
+<p>
     <a asp-action="Add" asp-controller="Clothes">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -81,11 +85,14 @@
                 <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a> |
                 <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.ItemId" 
                    asp-route-prevUrl="@previousUrl" class="btn btn-primary">Add to cart</a>
-            </td> @*TODO: Keep page number in prevUrl *@
+            </td>
         </tr>
 }
     </tbody>
 </table>
+
+@* Same as the whole table code above, just split into a partial view *@
+@*@await Html.PartialAsync("_DisplayClothes", Model)*@
 
 <ul class="pagination">
     @* Print Max Numbers*@
