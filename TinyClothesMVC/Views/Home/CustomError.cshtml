@@ -3,14 +3,17 @@
     ViewData["Title"] = "Error!!!";
 }
 
-<h1>DED</h1>
+<div class="text-center">
+    <h1>Map not updated!</h1>
 
-@if (ViewData["ErrorMsg"] != null)
-{
-    <h2>@ViewData["ErrorMsg"]</h2>
-}
-else 
-{
-    <p>Something went wrong. Please try again later.</p>
-}
+    @if (ViewData["ErrorMsg"] != null)
+    {
+        <h2>@ViewData["ErrorMsg"]</h2>
+    }
+    else 
+    {
+        <p>Something's wrong, there's an enemy hunter in the vicinity</p>
+    }
+</div>
+<img src="~/Images/huntGameWarningClue.jpg" class="img-thumbnail rounded" alt="Hunt Showdown game image"/>
 
