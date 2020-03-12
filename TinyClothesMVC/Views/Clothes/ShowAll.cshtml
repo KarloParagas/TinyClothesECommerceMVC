@@ -7,7 +7,7 @@
 
 <h1>Clothing Inventory</h1>
 
-@if (TempData["Message"] != null) 
+@if (TempData["Message"] != null)
 {
     <div class="alert alert-success" role="alert">
         @TempData["Message"]
@@ -22,77 +22,7 @@
     <a asp-action="Add" asp-controller="Clothes">Create New</a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @{
-                //Get curr url path "/Clothes/Showall"
-                string previousUrl = http.HttpContext.Request.Path;
-
-                //Add query string "?page=2"
-                previousUrl += http.HttpContext.Request.QueryString.Value;
-             }
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-primary">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a> |
-                <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.ItemId" 
-                   asp-route-prevUrl="@previousUrl" class="btn btn-primary">Add to cart</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
-@* Same as the whole table code above, just split into a partial view *@
-@*@await Html.PartialAsync("_DisplayClothes", Model)*@
+@await Html.PartialAsync("_DisplayClothes", Model)
 
 <ul class="pagination">
     @* Print Max Numbers*@
@@ -113,4 +43,29 @@
         }
     }
 </ul>
+
+@section Scripts{
+    <script>
+        console.log("Add to cart script");
+
+        //Find all the add to cart buttons/links
+        $("[data-cart-button]").click(
+            function (event) {
+                //Stop <a> from navigating
+                event.preventDefault();
+                alert("You clicked a button");
+
+                //The "Add to Cart" button that was clicked
+                var currBtn = this;
+                console.log(currBtn);
+
+                var itemId = $(currBtn).attr("data-cart-itemid");
+                alert("You picked " + itemId);
+
+                $.post("Cart/AddJS", { id: itemId }).done(function () {
+                    alert("Cart item added");
+                })
+            });
+    </script>
+}
 
