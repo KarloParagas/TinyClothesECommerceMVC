@@ -7,7 +7,7 @@
 
 <h1>Clothing Inventory</h1>
 
-@if (TempData["Message"] != null) 
+@if (TempData["Message"] != null)
 {
     <div class="alert alert-success" role="alert">
         @TempData["Message"]
@@ -22,77 +22,7 @@
     <a asp-action="Add" asp-controller="Clothes">Create New</a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            @{
-                //Get curr url path "/Clothes/Showall"
-                string previousUrl = http.HttpContext.Request.Path;
-
-                //Add query string "?page=2"
-                previousUrl += http.HttpContext.Request.QueryString.Value;
-             }
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-primary">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a> |
-                <a asp-action="Add" asp-controller="Cart" asp-route-id="@item.ItemId" 
-                   asp-route-prevUrl="@previousUrl" class="btn btn-primary">Add to cart</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
-@* Same as the whole table code above, just split into a partial view *@
-@*@await Html.PartialAsync("_DisplayClothes", Model)*@
+@await Html.PartialAsync("_DisplayClothes", Model)
 
 <ul class="pagination">
     @* Print Max Numbers*@
@@ -113,4 +43,77 @@
         }
     }
 </ul>
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Product added successfully</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Success!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Executed when add to cart button is clicked *@
+@section Scripts{
+    <script>
+        console.log("Add to cart script");
+
+        //Find all the add to cart buttons/links
+        $("[data-cart-button]").click(
+            function (event) {
+                //Stop <a> from navigating
+                event.preventDefault();
+
+                //The "Add to Cart" button that was clicked
+                var currBtn = this;
+                console.log(currBtn);
+
+                //"Disable" link
+                $(currBtn).text("Adding to cart..."); //Change text
+                var link = $(currBtn).attr("href"); //Get the href/link
+                if (link == "#") //if href="#" it's already been clicked and still processing
+                    return;
+                $(currBtn).attr("href", "#"); //Turn the href/link into a blank href with #
+
+                var itemId = $(currBtn).attr("data-cart-itemid");
+
+                //Post the information to Cart/AddJS
+                $.post("/Cart/AddJS", { id: itemId })
+                    .done(function () {
+                        //Increment the number of cart items
+                        var currNumItems = $(".fa-shopping-cart").text() //calls the fa-shopping-cart in _layout
+                        console.log(currNumItems);
+                        currNumItems++;
+
+                        $(".fa-shopping-cart").text(currNumItems);
+                        $(".modal-header").html("<h1 style='color: green;'>Success!</h1>");
+                        $(".modal-body").text("Item added successfully");
+                        $('#staticBackdrop').modal();
+                    })
+                    .always(
+                        //Always run (success/failure)
+                        function () {
+                            //Put href attribute back
+                            $(currBtn).attr("href", link); //Set the link back to the original
+                            $(currBtn).text("Add to cart"); //Set the text back to the original
+                        }
+                    )
+                    .fail(
+                        function () {
+
+                        }
+                    )
+            });
+    </script>
+}
 
