@@ -62,7 +62,16 @@
                 var itemId = $(currBtn).attr("data-cart-itemid");
                 alert("You picked " + itemId);
 
-                $.post("Cart/AddJS", { id: itemId }).done(function () {
+                //Post the information to Cart/AddJS
+                $.post("/Cart/AddJS", { id: itemId })
+                    .done(function () {
+                    //Increment the number of cart items
+                    var currNumItems = $(".fa-shopping-cart").text() //calls the fa-shopping-cart in _layout
+                    console.log(currNumItems);
+                    currNumItems++;
+
+                    $(".fa-shopping-cart").text(currNumItems)
+
                     alert("Cart item added");
                 })
             });
